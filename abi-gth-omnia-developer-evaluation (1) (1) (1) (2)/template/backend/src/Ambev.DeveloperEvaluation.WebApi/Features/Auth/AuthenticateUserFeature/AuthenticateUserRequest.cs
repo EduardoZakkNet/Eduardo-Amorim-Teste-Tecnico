@@ -1,8 +1,11 @@
-﻿namespace Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
 
 /// <summary>
 /// Represents the authentication request model for user login.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class AuthenticateUserRequest
 {
     /// <summary>

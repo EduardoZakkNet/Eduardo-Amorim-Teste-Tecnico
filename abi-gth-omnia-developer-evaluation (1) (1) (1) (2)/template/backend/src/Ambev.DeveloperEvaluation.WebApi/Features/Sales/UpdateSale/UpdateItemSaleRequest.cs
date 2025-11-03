@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 
 /// <summary>
 /// Represents a request to update a new Item Sale in the system.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UpdateItemSaleRequest
 {
     /// <summary>

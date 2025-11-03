@@ -20,4 +20,12 @@ public class DeleteSaleCommand : IRequest<DeleteSaleResponse>
     {
         Id = id;
     }
+    
+    /// <summary>
+    /// Initializes a new instance default of DeleteSaleCommand
+    /// </summary>
+    /// <param name="id">The ID of the Sale to delete</param>
+    public DeleteSaleCommand()
+    {
+    }
 }

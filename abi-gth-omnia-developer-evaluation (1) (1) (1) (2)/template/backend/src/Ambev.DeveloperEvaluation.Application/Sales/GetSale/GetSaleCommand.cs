@@ -20,4 +20,9 @@ public class GetSaleCommand : IRequest<GetSaleResult>
     {
         Id = id;
     }
+    
+    /// <summary>
+    /// Initializes a new instance default of GetSaleCommand
+    /// </summary>
+    public GetSaleCommand() { } 
 }

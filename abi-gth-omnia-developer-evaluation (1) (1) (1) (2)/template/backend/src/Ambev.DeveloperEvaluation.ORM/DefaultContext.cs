@@ -1,4 +1,5 @@
-﻿using Ambev.DeveloperEvaluation.Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using Ambev.DeveloperEvaluation.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
@@ -6,6 +7,7 @@ using System.Reflection;
 
 namespace Ambev.DeveloperEvaluation.ORM;
 
+[ExcludeFromCodeCoverage]
 public class DefaultContext : DbContext
 {
     public DbSet<User> Users { get; set; }

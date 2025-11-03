@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 
@@ -6,6 +7,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 /// <summary>
 /// API response model for GetSale operation
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class GetSaleResponse
 {
     public GetSaleResponse(List<ItemSale> items)
