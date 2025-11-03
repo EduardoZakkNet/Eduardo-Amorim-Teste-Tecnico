@@ -45,9 +45,15 @@ public class Sale : BaseEntity, ISale
     public SaleStatus Status { get; set; }
     
     /// <summary>
+    /// Gets the sale's status in the system.
+    /// </summary>
+    /// <returns>The sale's status as a string.</returns>
+    string ISale.Status => Status.ToString();
+    
+    /// <summary>
     /// Gets the Items of Sale.
     /// </summary>
-    public IEnumerable<ItemSale>? Items { get; set; }
+    public virtual List<ItemSale>? Items { get; set; } = new List<ItemSale>();
     
     /// <summary>
     /// Gets the date and time when the sale was created.

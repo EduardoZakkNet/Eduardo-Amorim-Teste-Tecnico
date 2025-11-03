@@ -1,3 +1,4 @@
+using Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
@@ -12,6 +13,9 @@ public class GetSaleProfile: Profile
     /// </summary>
     public GetSaleProfile()
     {
+        CreateMap<GetSaleRequest, GetSaleCommand>();
+        CreateMap<GetSaleResult, GetSaleResponse>();
+        
         CreateMap<Guid, Application.Sales.GetSale.GetSaleCommand>()
             .ConstructUsing(id => new Application.Sales.GetSale.GetSaleCommand(id));
     }

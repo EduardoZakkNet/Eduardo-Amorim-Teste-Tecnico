@@ -8,6 +8,11 @@ namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 /// </summary>
 public class GetSaleResult
 {
+    public GetSaleResult(List<ItemSale> items)
+    {
+        Items = items;
+    }
+
     /// <summary>
     /// The unique identifier of the created Sale
     /// </summary>
@@ -46,5 +51,5 @@ public class GetSaleResult
     /// <summary>
     /// The items of the Sale.
     /// </summary>
-    public IEnumerable<ItemSale> items { get; set; }
+    public List<ItemSale> Items { get; set; }
 }

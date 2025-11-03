@@ -10,4 +10,10 @@ public interface ISale
     /// </summary>
     /// <returns>The ID of the Sale as a string.</returns>
     public string Id { get; }
+    
+    /// <summary>
+    /// Gets the Status of the Sale.
+    /// </summary>
+    /// <returns>The Status of the Sale as a string.</returns>
+    public string Status { get; }
 }

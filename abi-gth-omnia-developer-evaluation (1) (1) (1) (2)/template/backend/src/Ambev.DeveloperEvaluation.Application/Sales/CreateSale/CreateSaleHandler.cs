@@ -100,7 +100,7 @@ public class CreateSaleHandler: IRequestHandler<CreateSaleCommand, CreateSaleRes
     /// </summary>
     /// <param name="items">The items of the Sale</param>
     /// <returns>Calculates the discount percentage based on the quantity</returns>
-    private IEnumerable<ItemSale> CalculateDiscountPercentage(IEnumerable<ItemSale> items)
+    private List<ItemSale> CalculateDiscountPercentage(IEnumerable<ItemSale> items)
     {
         var calculateDiscountPercentage = items.ToList();
         var itemsGroup = calculateDiscountPercentage
