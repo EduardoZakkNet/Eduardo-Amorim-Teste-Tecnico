@@ -29,7 +29,7 @@ public interface ISaleRepository
     /// <param name="SaleNumber">The Sale Number to search for</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The Sale if found, null otherwise</returns>
-    Task<Sale?> GetByEmailAsync(int saleNumber, CancellationToken cancellationToken = default);
+    Task<Sale?> GetBySaleNumberAsync(int saleNumber, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Deletes a Sale from the repository

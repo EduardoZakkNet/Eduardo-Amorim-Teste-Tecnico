@@ -10,9 +10,8 @@ public class GetSaleResponse
 {
     public GetSaleResponse(List<ItemSale> items)
     {
-        items = items;
+        Items = items;
     }
-
     /// <summary>
     /// The unique identifier of the created Sale
     /// </summary>
@@ -51,5 +50,5 @@ public class GetSaleResponse
     /// <summary>
     /// The items of the Sale.
     /// </summary>
-    public IEnumerable<ItemSale> items { get; set; }
+    public List<ItemSale>? Items { get; set; }
 }
