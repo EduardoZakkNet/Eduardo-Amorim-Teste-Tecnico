@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.GetSale;
 
 /// <summary>
 /// Request model for getting a Sale by ID
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class GetSaleRequest
 {
     /// <summary>

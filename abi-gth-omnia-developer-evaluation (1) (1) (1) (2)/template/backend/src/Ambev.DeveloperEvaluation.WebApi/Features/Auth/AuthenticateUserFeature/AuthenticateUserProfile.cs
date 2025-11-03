@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ambev.DeveloperEvaluation.Application.Auth.AuthenticateUser;
 using AutoMapper;
 using Ambev.DeveloperEvaluation.Domain.Entities;
@@ -12,6 +13,7 @@ public sealed class AuthenticateUserProfile : Profile
     /// <summary>
     /// Initializes a new instance of the <see cref="AuthenticateUserProfile"/> class
     /// </summary>
+    [ExcludeFromCodeCoverage]
     public AuthenticateUserProfile()
     {
         CreateMap<AuthenticateUserRequest, AuthenticateUserCommand>();

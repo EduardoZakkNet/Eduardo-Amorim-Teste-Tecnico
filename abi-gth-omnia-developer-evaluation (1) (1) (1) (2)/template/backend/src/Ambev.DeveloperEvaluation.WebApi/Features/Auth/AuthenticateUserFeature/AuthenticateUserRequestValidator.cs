@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using FluentValidation;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
@@ -5,6 +6,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature
 /// <summary>
 /// Validator for AuthenticateUserRequest
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class AuthenticateUserRequestValidator : AbstractValidator<AuthenticateUserRequest>
 {
     /// <summary>

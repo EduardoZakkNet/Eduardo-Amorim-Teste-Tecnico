@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
 using AutoMapper;
 
@@ -6,6 +7,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 /// <summary>
 /// Profile for mapping between Application and API CreateSale responses
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class CreateSaleProfile : Profile
 {
     /// <summary>

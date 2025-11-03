@@ -118,13 +118,11 @@ public class CreateSaleHandler: IRequestHandler<CreateSaleCommand, CreateSaleRes
             })
             .ToList();
         
-        var invalidProducts = itemsGroup
-            .Where(p => p.Quantity > 20)
-            .ToList();
+        var totalQuantity = itemsGroup.Sum(p => p.Quantity);
         
-        if (invalidProducts.Any())
+        if (totalQuantity > 20)
         {
-            var itemsDescriptions = string.Join(", ", invalidProducts.Select(p => p.Description));
+            var itemsDescriptions = itemsGroup.Select(c => c.Description).FirstOrDefault();
 
             var message =
                 $"The product exceeds the maximum limit of 20 items per product: {itemsDescriptions} Sale Number: {saleNumber}.";

@@ -13,12 +13,12 @@ public class CreateItemSaleCommand
     /// <summary>
     /// Gets the Quantity of Product.
     /// </summary>
-    public int Quantity { get; set; } = 0;
+    public int? Quantity { get; set; } = 0;
     
     /// <summary>
     /// Gets the Unit Value of Product.
     /// </summary>
-    public decimal UnitValue { get; set; } = 0m;
+    public decimal? UnitValue { get; set; } = 0m;
     
     /// <summary>
     /// Gets the date and time when the item sale was created.

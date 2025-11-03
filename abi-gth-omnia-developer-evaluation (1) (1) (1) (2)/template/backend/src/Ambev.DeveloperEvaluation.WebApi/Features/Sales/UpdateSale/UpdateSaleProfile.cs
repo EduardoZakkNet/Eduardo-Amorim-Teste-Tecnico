@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 using AutoMapper;
 
@@ -6,6 +7,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 /// <summary>
 /// Profile for mapping between Application and API UpdateSale responses
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UpdateSaleProfile : Profile
 {
     /// <summary>

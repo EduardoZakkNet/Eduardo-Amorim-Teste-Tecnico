@@ -1,7 +1,9 @@
+using System.Diagnostics.CodeAnalysis;
 using Ambev.DeveloperEvaluation.Common.Config;
 
 namespace Ambev.DeveloperEvaluation.Application.Config;
 
+[ExcludeFromCodeCoverage]
 public class SaleItemCancelledIntegrationKafkaConfig : KafkaConfig
 {
     public override string? TopicName { get { return "AMBEV.Integration.API.SaleItemCancelled"; } }

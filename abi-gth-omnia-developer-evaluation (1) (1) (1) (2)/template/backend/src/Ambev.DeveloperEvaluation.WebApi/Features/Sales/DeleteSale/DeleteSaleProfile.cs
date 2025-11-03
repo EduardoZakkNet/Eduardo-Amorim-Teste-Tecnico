@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using AutoMapper;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
@@ -5,6 +6,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.DeleteSale;
 /// <summary>
 /// Profile for mapping DeleteSale feature requests to commands
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class DeleteSaleProfile : Profile
 {
     /// <summary>

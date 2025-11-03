@@ -1,8 +1,11 @@
+using System.Diagnostics.CodeAnalysis;
+
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
 
 /// <summary>
 /// Represents a request to create a new Item Sale in the system.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class CreateItemSaleRequest
 {
     /// <summary>

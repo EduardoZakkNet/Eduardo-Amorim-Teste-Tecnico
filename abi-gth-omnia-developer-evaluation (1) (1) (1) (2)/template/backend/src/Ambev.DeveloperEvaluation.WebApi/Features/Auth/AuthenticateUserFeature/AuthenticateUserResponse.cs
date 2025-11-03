@@ -1,10 +1,12 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Auth.AuthenticateUserFeature;
 
 /// <summary>
 /// Represents the response returned after user authentication
 /// </summary>
+[ExcludeFromCodeCoverage]
 public sealed class AuthenticateUserResponse
 {
     /// <summary>

@@ -30,7 +30,7 @@ public class UpdateSaleCommand: IRequest<UpdateSaleResult>
     /// <summary>
     /// Gets or sets the Date of Sale. Must be date valid.
     /// </summary>
-    public DateTime Date { get; set; }
+    public DateTime? Date { get; set; }
     
     /// <summary>
     /// Gets or sets the Client Id. Must be date valid.

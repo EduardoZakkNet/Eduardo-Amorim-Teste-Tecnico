@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 
 namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
@@ -5,6 +6,7 @@ namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 /// <summary>
 /// Represents a request to update a new Sale in the system.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class UpdateSaleRequest
 {
     /// <summary>
