@@ -1,13 +1,17 @@
 using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 
 /// <summary>
-/// API response model for CreateSale operation
+/// API response model for UpdateSale operation
 /// </summary>
-public class CreateSaleResponse
+public class UpdateSaleResponse
 {
+    public UpdateSaleResponse(List<ItemSale> items)
+    {
+        Items = items;
+    }
     /// <summary>
     /// The unique identifier of the created Sale
     /// </summary>
@@ -44,7 +48,7 @@ public class CreateSaleResponse
     public SaleStatus Status { get; set; }
     
     /// <summary>
-    /// The Items of the Sale.
+    /// The items of the Sale.
     /// </summary>
-    public List<ItemSale> Items { get; set; } = new List<ItemSale>();
+    public List<ItemSale>? Items { get; set; }
 }

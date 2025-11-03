@@ -1,23 +1,27 @@
 using Ambev.DeveloperEvaluation.Common.Validation;
-using Ambev.DeveloperEvaluation.Domain.Entities;
 using Ambev.DeveloperEvaluation.Domain.Enums;
 using MediatR;
 
-namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 
 /// <summary>
-/// Command for creating a new sale.
+/// Command for update a new sale.
 /// </summary>
 /// <remarks>
 /// This command is used to capture the required data for creating a sale, 
 /// including sale date, SaleDate, total sales amount, Branch, and Itens List. 
 /// It implements <see cref="IRequest{TResponse}"/> to initiate the request 
-/// that returns a <see cref="CreateSaleResult"/>.
+/// that returns a <see cref="UpdateSaleResult"/>.
 /// 
 /// populated and follow the required rules.
 /// </remarks>
-public class CreateSaleCommand : IRequest<CreateSaleResult>
+public class UpdateSaleCommand: IRequest<UpdateSaleResult>
 {
+    /// <summary>
+    /// Gets the Sale Id.
+    /// </summary>
+    public Guid Id { get; set; }
+    
     /// <summary>
     /// Gets or sets the Sale Number. Must be date valid.
     /// </summary>
@@ -34,6 +38,11 @@ public class CreateSaleCommand : IRequest<CreateSaleResult>
     public Guid ClienteId { get; set; } = Guid.Empty;
     
     /// <summary>
+    /// Gets the Status of Sale.
+    /// </summary>
+    public SaleStatus Status { get; set; }
+    
+    /// <summary>
     /// Gets or sets the Branch. Must be date valid.
     /// </summary>
     public string Branch { get; set; } = string.Empty;
@@ -41,12 +50,11 @@ public class CreateSaleCommand : IRequest<CreateSaleResult>
     /// <summary>
     /// Gets or sets the initial Items of the Sale.
     /// </summary>
-    public IEnumerable<CreateItemSaleCommand>? Items { get; set; }
-    
+    public IEnumerable<UpdateItemSaleCommand>? Items { get; set; }
     
     public ValidationResultDetail Validate()
     {
-        var validator = new CreateSaleCommandValidator();
+        var validator = new UpdateSaleCommandValidador();
         var result = validator.Validate(this);
         return new ValidationResultDetail
         {

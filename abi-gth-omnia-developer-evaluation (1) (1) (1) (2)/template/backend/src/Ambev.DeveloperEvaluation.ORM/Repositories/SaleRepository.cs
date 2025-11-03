@@ -74,4 +74,17 @@ public class SaleRepository: ISaleRepository
         await _context.SaveChangesAsync(cancellationToken);
         return true;
     }
+    
+    /// <summary>
+    /// Update a Sale in the database
+    /// </summary>
+    /// <param name="sale">The sale to Update</param>
+    /// <param name="cancellationToken">Cancellation token</param>
+    /// <returns>The created sale</returns>
+    public async Task<Sale> UpdateAsync(Sale sale, CancellationToken cancellationToken = default)
+    {
+        _context.Entry(sale).CurrentValues.SetValues(sale);
+        await _context.SaveChangesAsync(cancellationToken);
+        return sale;
+    }
 }

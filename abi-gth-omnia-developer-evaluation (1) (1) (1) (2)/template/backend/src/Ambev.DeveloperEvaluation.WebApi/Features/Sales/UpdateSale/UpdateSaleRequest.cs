@@ -1,11 +1,17 @@
+using Ambev.DeveloperEvaluation.Domain.Enums;
 
-namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.CreateSale;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 
 /// <summary>
-/// Represents a request to create a new Sale in the system.
+/// Represents a request to update a new Sale in the system.
 /// </summary>
-public class CreateSaleRequest
+public class UpdateSaleRequest
 {
+    /// <summary>
+    /// Gets the Sale Id.
+    /// </summary>
+    public Guid Id { get; set; }
+    
     /// <summary>
     /// Gets or sets the Sale Number. Must be date valid.
     /// </summary>
@@ -22,6 +28,11 @@ public class CreateSaleRequest
     public Guid ClienteId { get; set; } = Guid.Empty;
     
     /// <summary>
+    /// Gets the Status of Sale.
+    /// </summary>
+    public SaleStatus Status { get; set; }
+    
+    /// <summary>
     /// Gets or sets the Branch. Must be date valid.
     /// </summary>
     public string Branch { get; set; } = string.Empty;
@@ -29,5 +40,5 @@ public class CreateSaleRequest
     /// <summary>
     /// Gets or sets the initial Items of the Sale.
     /// </summary>
-    public IEnumerable<CreateItemSaleRequest>? Items { get; set; }
+    public IEnumerable<UpdateItemSaleRequest>? Items { get; set; }
 }

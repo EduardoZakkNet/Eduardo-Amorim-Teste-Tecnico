@@ -4,6 +4,7 @@ using Ambev.DeveloperEvaluation.Domain.Repositories;
 using AutoMapper;
 using MediatR;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 
 namespace Ambev.DeveloperEvaluation.Application.Sales.GetSale;
 
@@ -14,6 +15,7 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
 {
     private readonly ISaleRepository _saleRepository;
     private readonly IMapper _mapper;
+    private readonly ILogger<GetSaleHandler> _logger;
 
     /// <summary>
     /// Initializes a new instance of GetSaleHandler
@@ -21,12 +23,14 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
     /// <param name="saleRepository">The Sale repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="validator">The validator for GetSaleCommand</param>
+    /// <param name="logger"></param>
     public GetSaleHandler(
         ISaleRepository saleRepository,
-        IMapper mapper)
+        IMapper mapper, ILogger<GetSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mapper = mapper;
+        _logger = logger;
     }
 
     /// <summary>
@@ -50,7 +54,16 @@ public class GetSaleHandler : IRequestHandler<GetSaleCommand, GetSaleResult>
         }
         catch (Exception e)
         {
-            throw new DataException("An error occurred while performing a query in the database.");
+            var message = $"A database error occurred in the query GetByIdAsync for sale ID {request.Id} on {DateTime.UtcNow}";
+            _logger.LogError(message);
+            throw new DataException(message);
+        }
+
+        if (sale == null)
+        {
+            var message = $"Sales not found {request.Id} on {DateTime.UtcNow}";
+            _logger.LogError(message);
+            throw new KeyNotFoundException(message);
         }
         
         return _mapper.Map<GetSaleResult>(sale);
