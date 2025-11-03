@@ -24,8 +24,8 @@ public class SaleValidator : AbstractValidator<Sale>
             .NotNull().WithMessage("Item is required.")
             .Must(item => !string.IsNullOrWhiteSpace(item.Description))
             .WithMessage("Description is required.")
-            .Must(item => item.Description.Length >= 100 && item.Description.Length <= 200)
-            .WithMessage("Description must be between 100 and 200 characters.");
+            .Must(item => item.Description.Length >= 10 && item.Description.Length <= 200)
+            .WithMessage("Description must be between 10 and 200 characters.");
         
         RuleForEach(sale => sale.Items)
             .ChildRules(items => 

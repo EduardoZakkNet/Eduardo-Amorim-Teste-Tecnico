@@ -1,40 +1,38 @@
 using System.Data;
-using MediatR;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using AutoMapper;
-using FluentValidation;
 using System.Text.Json;
 using Ambev.DeveloperEvaluation.Application.Config;
 using Ambev.DeveloperEvaluation.Application.Service;
 using Ambev.DeveloperEvaluation.Domain.Entities;
-using Ambev.DeveloperEvaluation.Domain.Enums;
 using Ambev.DeveloperEvaluation.Domain.Events;
 using Ambev.DeveloperEvaluation.Domain.Repositories;
-using ArithmeticException = System.ArithmeticException;
+using AutoMapper;
+using FluentValidation;
+using MediatR;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
-namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+namespace Ambev.DeveloperEvaluation.Application.Sales.UpdateSale;
 
 /// <summary>
-/// Handler for processing CreateSaleCommand requests
+/// Handler for processing UpdateSaleCommand requests
 /// </summary>
-public class CreateSaleHandler: IRequestHandler<CreateSaleCommand, CreateSaleResult>
+public class UpdateSaleHandler: IRequestHandler<UpdateSaleCommand, UpdateSaleResult>
 {
     private readonly ISaleRepository _saleRepository;
     private readonly IMapper _mapper;
     private readonly IConfiguration _configuration;
-    private readonly ILogger<CreateSaleHandler> _logger;
-    public event EventHandler<PurchaseCreatedEventArgs> _eventPurchase;
+    private readonly ILogger<UpdateSaleHandler> _logger;
+    public event EventHandler<PurchaseChangeEventArgs> _eventPurchase;
 
     /// <summary>
-    /// Initializes a new instance of CreateUserHandler
+    /// Initializes a new instance of UpdateUserHandler
     /// </summary>
     /// <param name="saleRepository">The sale repository</param>
     /// <param name="mapper">The AutoMapper instance</param>
     /// <param name="configuration"></param>
     /// <param name="logger">Logger of aplication</param>
-    public CreateSaleHandler(ISaleRepository saleRepository, IMapper mapper, IConfiguration configuration, 
-        ILogger<CreateSaleHandler> logger)
+    public UpdateSaleHandler(ISaleRepository saleRepository, IMapper mapper, IConfiguration configuration, 
+        ILogger<UpdateSaleHandler> logger)
     {
         _saleRepository = saleRepository;
         _mapper = mapper;
@@ -43,34 +41,41 @@ public class CreateSaleHandler: IRequestHandler<CreateSaleCommand, CreateSaleRes
     }
     
     /// <summary>
-    /// Handles the CreateSaleCommand request
+    /// Handles the UpdateSaleCommand request
     /// </summary>
-    /// <param name="command">The CreateSale command</param>
+    /// <param name="command">The UpdateSale command</param>
     /// <param name="cancellationToken">Cancellation token</param>
     /// <returns>The created sale details</returns>
-    public async Task<CreateSaleResult> Handle(CreateSaleCommand command, CancellationToken cancellationToken)
+    public async Task<UpdateSaleResult> Handle(UpdateSaleCommand command, CancellationToken cancellationToken)
     {
-        Sale? createdSale;
-        var validator = new CreateSaleCommandValidator();
+        Sale? updatedSale;
+        var validator = new UpdateSaleCommandValidador();
         var validationResult = await validator.ValidateAsync(command, cancellationToken);
 
         if (!validationResult.IsValid)
             throw new ValidationException(validationResult.Errors);
         
-        var sale = _mapper.Map<Sale>(command);
-        sale.Status = SaleStatus.Active;
+        var sale = GetSaleAsync(command.Id);
+        var existendSale =  _mapper.Map<Sale>(command);
         
-        if (sale.Items != null && sale.Items.Any())
+        existendSale.UpdatedAt = DateTime.UtcNow;
+        
+        if (existendSale.Items != null && existendSale.Items.Any())
         {
-            await ValidateSaleNumberAsync(command.SaleNumber);
-            ValidateItemsSale(sale.Items, command.SaleNumber);
-            sale.Items = CalculateDiscountPercentage(sale.Items, command.SaleNumber);
-            sale.TotalSaleAmount = sale.Items.Sum(i => i.TotalItem);
+            foreach (var item in existendSale.Items)
+            {
+                item.SaleId = existendSale.Id;
+                item.UpdatedAt = DateTime.UtcNow;
+            }
+            
+            ValidateItemsSale(existendSale.Items, command.SaleNumber);
+            existendSale.Items = CalculateDiscountPercentage(existendSale.Items, command.SaleNumber);
+            existendSale.TotalSaleAmount = existendSale.Items.Sum(i => i.TotalItem);
         }
 
         try
         {
-            createdSale = await _saleRepository.CreateAsync(sale, cancellationToken);
+            updatedSale = await _saleRepository.UpdateAsync(existendSale, cancellationToken);
         }
         catch (Exception e)
         {
@@ -78,27 +83,39 @@ public class CreateSaleHandler: IRequestHandler<CreateSaleCommand, CreateSaleRes
             throw new DataException($"A database error occurred in the query CreateAsync for Sale Number {command.SaleNumber} on {DateTime.UtcNow}");
         }
 
-        var result = _mapper.Map<CreateSaleResult>(createdSale);
+        var result = _mapper.Map<UpdateSaleResult>(updatedSale);
         await PublishSaleCreatedEventAsync(result);
         
         return result;
     }
 
     /// <summary>
-    /// Method the ValidateSaleNumber
+    /// Method the Get Sale
     /// </summary>
     /// <param name="saleNumber"></param>
     /// <returns>Validates if the total quantity of Items exceeds the limit</returns>
-    private async Task ValidateSaleNumberAsync(int saleNumber)
+    private async Task<Sale> GetSaleAsync(Guid id)
     {
-        var saleExists = await _saleRepository.GetBySaleNumberAsync(saleNumber) != null;
-    
-        if (saleExists)
-        {
-            var message = $"A sale with Sale Number {saleNumber} already exists.";
-            _logger.LogError(message);
-            throw new InvalidOperationException(message);
+        Sale? sale;
+        try
+        { 
+            sale = await _saleRepository.GetByIdAsync(id);
         }
+        catch (Exception e)
+        {
+            var message = $"A database error occurred in the query GetByIdAsync for sale ID {id} on {DateTime.UtcNow}";
+            _logger.LogError(message);
+            throw new DataException(message);
+        }
+
+        if (sale == null)
+        {
+            var message = $"Sales not found {id} on {DateTime.UtcNow}";
+            _logger.LogError(message);
+            throw new KeyNotFoundException(message);
+        }
+
+        return sale;
     }
     
     /// <summary>
@@ -200,23 +217,23 @@ public class CreateSaleHandler: IRequestHandler<CreateSaleCommand, CreateSaleRes
     /// </summary>
     /// <param name="result">The Sale entity</param>
     /// <returns>Publish in kafka the new sale information</returns>
-    private Task PublishSaleCreatedEventAsync(CreateSaleResult result)
+    private Task PublishSaleCreatedEventAsync(UpdateSaleResult result)
     {
-        var config = new SaleCreatedIntegrationKafkaConfig();
+        var config = new SaleModifiedIntegrationKafkaConfig();
         var bootstrapServers = _configuration["AmbevServerKafka:uri"];
         var keySecurityKafka = _configuration["AmbevServerKafka:key"];
 
         if (bootstrapServers != null)
         {
-            using var kafkaService = new KafkaProducerService<SaleCreatedIntegrationKafkaConfig>(bootstrapServers, config);
+            using var kafkaService = new KafkaProducerService<SaleModifiedIntegrationKafkaConfig>(bootstrapServers, config);
         }
 
         var message = JsonSerializer.Serialize(result);
         
         //Apenas uma simulação, Utilizando o kafka como configuração, mas também pode ser usado qualquer outro (Rabbit, Azure)
-        _eventPurchase?.Invoke(this, new PurchaseCreatedEventArgs(result.Id, DateTime.Now));
+        _eventPurchase?.Invoke(this, new PurchaseChangeEventArgs(result.Id, DateTime.Now));
         
-        _logger.LogInformation("Event PurchaseCreatedEventArgs published on Kafka successfully - Topic: {Nome}", config.TopicName);
+        _logger.LogInformation("Event PurchaseChangeEventArgs published on Kafka successfully - Topic: {Nome}", config.TopicName);
         return Task.CompletedTask;
     }
 }

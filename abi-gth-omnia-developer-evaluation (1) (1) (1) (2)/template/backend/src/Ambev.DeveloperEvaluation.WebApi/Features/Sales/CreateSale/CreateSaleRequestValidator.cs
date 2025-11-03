@@ -39,8 +39,8 @@ public class CreateSaleRequestValidator : AbstractValidator<CreateSaleRequest>
             .NotNull().WithMessage("Item is required.")
             .Must(item => !string.IsNullOrWhiteSpace(item.Description))
             .WithMessage("Description is required.")
-            .Must(item => item.Description.Length >= 100 && item.Description.Length <= 200)
-            .WithMessage("Description must be between 100 and 200 characters.");
+            .Must(item => item.Description.Length >= 10 && item.Description.Length <= 200)
+            .WithMessage("Description must be between 10 and 200 characters.");
         
         RuleForEach(sale => sale.Items)
             .ChildRules(items => 
@@ -56,14 +56,6 @@ public class CreateSaleRequestValidator : AbstractValidator<CreateSaleRequest>
                 items.RuleFor(item => item.UnitValue)
                     .NotNull().WithMessage("Unit Value is required.")
                     .GreaterThan(0).WithMessage("Unit Value must be greater than 0.");
-            });
-        
-        RuleForEach(sale => sale.Items)
-            .ChildRules(items => 
-            {
-                items.RuleFor(item => item.Discount)
-                    .NotNull().WithMessage("Discount is required.")
-                    .GreaterThan(0).WithMessage("Discount must be greater than 0.");
             });
     }
 }

@@ -1,17 +1,18 @@
 using FluentValidation;
 
-namespace Ambev.DeveloperEvaluation.Application.Sales.CreateSale;
+namespace Ambev.DeveloperEvaluation.WebApi.Features.Sales.UpdateSale;
 
 /// <summary>
-/// Validator for CreateSaleCommand that defines validation rules for user creation command.
+/// Validator for UpdateSaleRequest that defines validation rules for user creation.
 /// </summary>
-public class CreateSaleCommandValidator: AbstractValidator<CreateSaleCommand>
+public class UpdateSaleRequestValidator : AbstractValidator<UpdateSaleRequest>
 {
-    /// <summary>
-    /// Initializes a new instance of the CreateUserRequestValidator with defined validation rules.
+        /// <summary>
+    /// Initializes a new instance of the UpdateSaleRequestValidator with defined validation rules.
     /// </summary>
     /// <remarks>
     /// Validation rules include:
+    /// -- Id : Required
     /// - Description: Required, length between 100 and 200 characters
     /// - Quantity: Required
     /// - Unit Value: Required and greater than 0
@@ -19,12 +20,16 @@ public class CreateSaleCommandValidator: AbstractValidator<CreateSaleCommand>
     /// - SaleNumber: Required and greater than 0
     /// - Date: Required
     /// - Branch: Required
+    /// - Status: Required
     /// </remarks>
-    public CreateSaleCommandValidator()
+    public UpdateSaleRequestValidator()
     {
         RuleFor(sale => sale.Items).Must(item => item.Any())
             .NotNull().WithMessage("The Items list cannot be null.");
-        
+
+        RuleFor(sale => sale.Id)
+            .NotNull().WithMessage("Sale Id is required.");
+            
         RuleFor(sale => sale.SaleNumber)
             .NotNull().WithMessage("Sale Number is required.")
             .GreaterThan(0).WithMessage("Sale Number must be greater than 0.");
@@ -43,6 +48,13 @@ public class CreateSaleCommandValidator: AbstractValidator<CreateSaleCommand>
             .WithMessage("Description must be between 10 and 200 characters.");
         
         RuleForEach(sale => sale.Items)
+            .ChildRules(items =>
+            {
+                items.RuleFor(item => item.Id)
+                    .NotNull().WithMessage("Sale Item Id is required.");
+            });
+        
+        RuleForEach(sale => sale.Items)
             .ChildRules(items => 
             {
                 items.RuleFor(item => item.Quantity)
@@ -58,5 +70,7 @@ public class CreateSaleCommandValidator: AbstractValidator<CreateSaleCommand>
                     .GreaterThan(0).WithMessage("Unit Value must be greater than 0.");
             });
         
+        RuleFor(sale => sale.Status)
+            .NotNull().WithMessage("Sale Status is required.");
     }
 }
